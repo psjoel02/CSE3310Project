@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient3"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ChangePassActivity">
+
+
+    <TextView
+        android:id="@+id/ChangeEmailText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:text="Change Email"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/ic_baseline_mark_email_read_24">
+
+    </ImageView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/idTempOldEmail"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="240dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Enter Current Password"
+        android:padding="5dp"
+        android:textColorHint="@color/white"
+        app:hintTextColor="@color/white"
+        app:passwordToggleEnabled="true"
+        tools:ignore="ExtraText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/idPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_baseline_lock_24"
+            android:fontFamily="@font/poppins_bold"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/idTempNewEmail"
+        style="@style/TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Enter New Email"
+        android:padding="5dp"
+        android:textColorHint="@color/white"
+        app:hintTextColor="@color/white"
+        app:passwordToggleEnabled="true"
+        tools:ignore="ExtraText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/idNewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_baseline_email_24"
+            android:fontFamily="@font/poppins_bold"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/idTempConfirmNewEmail"
+        style="@style/TextInputLayout"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idTempNewEmail"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="Confirm New Email"
+        android:padding="5dp"
+        android:textColorHint="@color/white"
+        app:hintTextColor="@color/white"
+        app:passwordToggleEnabled="true"
+        tools:ignore="ExtraText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/idConfirmNewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:drawableStart="@drawable/ic_baseline_mark_email_read_24"
+            android:fontFamily="@font/poppins_bold"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/idChangeEmailButton"
+        android:layout_width="371dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idTempConfirmNewEmail"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+
+        android:background="@color/purple_500"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Change Email"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/idHomeButton"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idChangeEmailButton"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/purple_700"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Back to Home"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <ProgressBar
+        android:id="@+id/idProgressBarLoad"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

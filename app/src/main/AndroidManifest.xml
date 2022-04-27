@@ -44,8 +44,13 @@
         <activity
             android:name=".ImageUploadActivity"
             android:exported="false" />
+        <activity android:name=".ChangePassActivity">
+
+        </activity>
+        <activity android:name=".ChangeEmailActivity">
+
+        </activity>
         <activity
-            
             android:name=".AnimalInfo"
 
             android:exported="false" />

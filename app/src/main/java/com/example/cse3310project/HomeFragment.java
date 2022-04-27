@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +20,20 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
     private String name;
-
+    private DatabaseReference root = FirebaseDatabase.getInstance().getReference("Users");
+    Button signOutButton;
+    private ProgressBar loadingBar;
     public HomeFragment() {
     }
 
@@ -40,11 +50,21 @@ public class HomeFragment extends Fragment {
         TextView verifiedTV = view.findViewById(R.id.verifiedTV);
         Button uploadFromGalleryButton = view.findViewById(R.id.uploadFromGalleryButton);
         Button uploadFromCameraButton = view.findViewById(R.id.uploadFromCameraButton);
-
+        Button signOutButton = view.findViewById(R.id.signOutButton);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
+        loadingBar = view.findViewById(R.id.idProgressBarHome);
         FragmentActivity activity = requireActivity();
+
+        signOutButton.setOnClickListener(v -> {
+            loadingBar.setVisibility(View.VISIBLE);
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(activity, LoginActivity.class);
+            startActivity(i);
+            Toast.makeText(activity, "Signed out", Toast.LENGTH_SHORT).show();
+            loadingBar.setVisibility(View.INVISIBLE);
+            activity.finish();
+        });
 
         if(currentUser == null) {
             Intent i = new Intent(activity, LoginActivity.class);
@@ -53,11 +73,44 @@ public class HomeFragment extends Fragment {
             activity.finish();
         }
 
-        if(!currentUser.isEmailVerified()){
+        if(!Objects.requireNonNull(currentUser).isEmailVerified()){
             verifiedTV.setVisibility(View.VISIBLE);
         }
+        else{
+            //if user is verified, update value in database
+            root.orderByChild("email").equalTo(currentUser.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String currentEmail = ds.child("email").getValue(String.class);
+                            String verifiedstatus = ds.child("verifiedstatus").getValue(String.class);
+
+                            if (Objects.requireNonNull(currentEmail).equals(currentUser.getEmail()) && verifiedstatus != null) {
+                                ds.child("verifiedstatus").getRef().setValue("verified");
+                                verifiedTV.setText("You are verified");
+                                verifiedTV.setVisibility(View.VISIBLE);
+                            }
+                            else{
+                                //current user does not match FBRTDB
+                                //Toast.makeText(getContext(), "Login Failed," + currentUser.getEmail(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                    else{
+                        //snapshot does not exist
+                        Toast.makeText(getContext(), "Login Failed, snapshot error", Toast.LENGTH_LONG).show();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getContext(), "Login Failed, database error ", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
         //stores name on device for homepage, profile reads from DB
-        SharedPreferences mPrefs = getContext().getSharedPreferences("NamePref", 0);
+        SharedPreferences mPrefs = requireContext().getSharedPreferences("NamePref", 0);
         name = mPrefs.getString("HomeName", "UserNotFound");
         helloTextView.setText(String.format("Hello, %s!", name));
 

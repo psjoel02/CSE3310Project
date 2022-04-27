@@ -24,6 +24,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -58,14 +60,12 @@ public class HomeActivity extends AppCompatActivity {
             String home_email = bundle.getString("email");
             String home_fullname = bundle.getString("fullname");
             String home_dob = bundle.getString("dob");
-
             ProfileFragment fragment = new ProfileFragment();
             fragment.setProf_username(home_username);
             fragment.setProf_password(home_password);
             fragment.setProf_email(home_email);
             fragment.setProf_fullname(home_fullname);
             fragment.setProf_dob(home_dob);
-
         }
         else if(bundle == null && currentUser != null){
             root.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -80,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
                             String DBName = ds.child("fullname").getValue(String.class);
                             String DBDob = ds.child("dob").getValue(String.class);
 
-                            if(DBEmail.equals(currentUser.getEmail())){
+                            if(Objects.requireNonNull(DBEmail).equals(currentUser.getEmail())){
                                 ProfileFragment fragment = new ProfileFragment();
                                 fragment.setProf_username(DBUser);
                                 fragment.setProf_password(DBPass);

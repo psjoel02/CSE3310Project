@@ -91,7 +91,7 @@
 
     <TextView
         android:id="@+id/SignInText"
-        android:layout_width="match_parent"
+        android:layout_width="87dp"
         android:layout_height="wrap_content"
         android:layout_above="@id/idTempPassword"
         android:layout_marginStart="20dp"
@@ -122,17 +122,16 @@
 
     <TextView
         android:id="@+id/idTVforgotPassword"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/idLoginButton"
-        android:layout_marginTop="-110dp"
+        android:layout_below="@id/idTempPassword"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="15dp"
         android:fontFamily="@font/poppins_bold"
         android:gravity="right"
         android:text="Forgot Password?"
         android:textColor="@color/green"
-        android:textSize="18sp"
-        tools:ignore="RtlHardcoded" />
+        android:textSize="18sp" />
 
 
     <TextView

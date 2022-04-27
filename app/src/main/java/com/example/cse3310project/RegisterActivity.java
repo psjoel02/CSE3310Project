@@ -68,110 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
             manager.createNotificationChannel(channel);
         }
 
-
-        registerButton.setOnClickListener(v -> {
-
-            loadingBar.setVisibility(View.VISIBLE);
-            String username = Objects.requireNonNull(userLayout.getEditText()).getText().toString().trim();
-            String email = Objects.requireNonNull(emailLayout.getEditText()).getText().toString().trim();
-            String password = Objects.requireNonNull(passLayout.getEditText()).getText().toString().trim();
-            String confirmPassword = Objects.requireNonNull(ConfirmPassword.getText()).toString().trim();
-            String fullname = "";
-            String dob = "";
-            //can be modified later in profile
-
-            HashMap<String, String> userMap = new HashMap<>();
-            userMap.put("username", username);
-            userMap.put("email", email);
-            userMap.put("password", password);
-            userMap.put("fullname", fullname);
-            userMap.put("dob", dob);
-
-            if(!password.equals(confirmPassword)){
-                Toast.makeText(RegisterActivity.this,"Passwords must match" ,Toast.LENGTH_SHORT).show();
-                // System.out.println(password);
-                // System.out.println(confirmPassword);
-                //if password does not match, show toast
-                loadingBar.setVisibility(View.INVISIBLE);
-            }
-            else if((TextUtils.isEmpty(password) && TextUtils.isEmpty(confirmPassword)) || ((TextUtils.isEmpty(username)) || (TextUtils.isEmpty(email)))) {
-                if(TextUtils.isEmpty(email)) {
-                    Toast.makeText(RegisterActivity.this,"Enter your information" ,Toast.LENGTH_SHORT).show();
-                    //if email, username, password, and confirm password fields are empty, toast to prompt entry
-                } else {
-                    // Alert user in the case that email is not empty, but password fields are
-                    Toast.makeText(RegisterActivity.this, "Enter a password", Toast.LENGTH_SHORT).show();
-                }
-                loadingBar.setVisibility(View.INVISIBLE);
-            }
-            else if(!email.contains("@") || !email.contains(".")){
-                Toast.makeText(RegisterActivity.this, "Email is not formatted correctly", Toast.LENGTH_SHORT).show();
-                loadingBar.setVisibility(View.INVISIBLE);
-                //if email does not contain @ or ., it will not be accepted
-            }
-            else if(password.length() < 6 || username.length() < 6){
-                Toast.makeText(RegisterActivity.this, "Password or username is not greater than 6 characters", Toast.LENGTH_SHORT).show();
-                loadingBar.setVisibility(View.INVISIBLE);
-                //password must be greater than 6 characters, no alphanumeric required
-            }
-            else if(password.length() > 20 || username.length() > 20){
-                Toast.makeText(RegisterActivity.this, "Password or username is greater than 20 characters", Toast.LENGTH_SHORT).show();
-                loadingBar.setVisibility(View.INVISIBLE);
-                //password must be less than 20 characters, no alphanumeric required
-            }
-            else{
-                Query checkUser = root.orderByChild("username").equalTo(username);
-                checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            /*check if username exists in FireBase Realtime Database, if not, and email also
-                            does not exist in Firebase Authentication, user will be created in both Auth and RTDB*/
-                            Toast.makeText(RegisterActivity.this,"Username already exists in DB" ,Toast.LENGTH_SHORT).show();
-                            loadingBar.setVisibility(View.INVISIBLE);
-                        }
-                        else{
-                            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                                if(task.isSuccessful()){
-
-                                    Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnSuccessListener(unused -> {
-                                        NotificationCompat.Builder builder = new NotificationCompat.Builder(RegisterActivity.this, "My Notification");
-                                        builder.setContentTitle("AIR Reminder");
-                                        builder.setContentText("A verification email was sent to the address specified.");
-                                        builder.setSmallIcon(R.drawable.ic_shiba);
-                                        builder.setAutoCancel(true);
-                                        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(RegisterActivity.this);
-                                        managerCompat.notify(1,builder.build());
-                                        //send notification to user to remind them to verify their email
-                                    });
-
-                                    root.push().setValue(userMap);
-                                    //upload data to database and simultaneously create user with email and password in auth
-                                    loadingBar.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(RegisterActivity.this,"Registration Successful",Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                                    //if authorization with firebase is successful, register user and move to home class
-                                    startActivity(i);
-                                    finish();
-                                }
-                                else{
-                                    loadingBar.setVisibility(View.INVISIBLE);
-                                    Toast.makeText(RegisterActivity.this,"Registration Failed, " + Objects.requireNonNull(task.getException()).getMessage(),Toast.LENGTH_LONG).show();
-                                    //if authorization with firebase is not successful, notify user of fail, along with the reason
-                                }
-                            });
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(RegisterActivity.this,"Registration Failed, ",Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-        });
+        registerButton.setOnClickListener(v -> register());
 
         loginTV.setOnClickListener(view -> {
             Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -179,5 +76,111 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
 
+
     }
+
+    protected void register(){
+        loadingBar.setVisibility(View.VISIBLE);
+        String username = Objects.requireNonNull(userLayout.getEditText()).getText().toString().trim();
+        String email = Objects.requireNonNull(emailLayout.getEditText()).getText().toString().trim();
+        String password = Objects.requireNonNull(passLayout.getEditText()).getText().toString().trim();
+        String confirmPassword = Objects.requireNonNull(ConfirmPassword.getText()).toString().trim();
+        String fullname = "";
+        String dob = "";
+        String verifiedstatus = "not verified";
+
+        HashMap<String, String> userMap = new HashMap<>();
+        userMap.put("username", username);
+        userMap.put("email", email);
+        userMap.put("password", password);
+        userMap.put("fullname", fullname);
+        userMap.put("dob", dob);
+        userMap.put("verifiedstatus", verifiedstatus);
+
+        if(!password.equals(confirmPassword)){
+            Toast.makeText(RegisterActivity.this,"Passwords must match" ,Toast.LENGTH_SHORT).show();
+            // System.out.println(password);
+            // System.out.println(confirmPassword);
+            //if password does not match, show toast
+            loadingBar.setVisibility(View.INVISIBLE);
+        }
+        else if((TextUtils.isEmpty(password) && TextUtils.isEmpty(confirmPassword)) || ((TextUtils.isEmpty(username)) || (TextUtils.isEmpty(email)))) {
+            if(TextUtils.isEmpty(email)) {
+                Toast.makeText(RegisterActivity.this,"Enter your information" ,Toast.LENGTH_SHORT).show();
+                //if email, username, password, and confirm password fields are empty, toast to prompt entry
+            } else {
+                // Alert user in the case that email is not empty, but password fields are
+                Toast.makeText(RegisterActivity.this, "Enter a password", Toast.LENGTH_SHORT).show();
+            }
+            loadingBar.setVisibility(View.INVISIBLE);
+        }
+        else if(!email.contains("@") || !email.contains(".")){
+            Toast.makeText(RegisterActivity.this, "Email is not formatted correctly", Toast.LENGTH_SHORT).show();
+            loadingBar.setVisibility(View.INVISIBLE);
+            //if email does not contain @ or ., it will not be accepted
+        }
+        else if(password.length() < 6 || username.length() < 6){
+            Toast.makeText(RegisterActivity.this, "Password or username is not greater than 6 characters", Toast.LENGTH_SHORT).show();
+            loadingBar.setVisibility(View.INVISIBLE);
+            //password must be greater than 6 characters, no alphanumeric required
+        }
+        else if(password.length() > 20 || username.length() > 20){
+            Toast.makeText(RegisterActivity.this, "Password or username is greater than 20 characters", Toast.LENGTH_SHORT).show();
+            loadingBar.setVisibility(View.INVISIBLE);
+            //password must be less than 20 characters, no alphanumeric required
+        }
+        else{
+            Query checkUser = root.orderByChild("username").equalTo(username);
+            checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                            /*check if username exists in FireBase Realtime Database, if not, and email also
+                            does not exist in Firebase Authentication, user will be created in both Auth and RTDB*/
+                        Toast.makeText(RegisterActivity.this,"Username already exists in DB" ,Toast.LENGTH_SHORT).show();
+                        loadingBar.setVisibility(View.INVISIBLE);
+                    }
+                    else{
+                        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
+
+                                Objects.requireNonNull(mAuth.getCurrentUser()).sendEmailVerification().addOnSuccessListener(unused -> {
+                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(RegisterActivity.this, "My Notification");
+                                    builder.setContentTitle("AIR Reminder");
+                                    builder.setContentText("A verification email was sent to the address specified.");
+                                    builder.setSmallIcon(R.drawable.ic_shiba);
+                                    builder.setAutoCancel(true);
+                                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(RegisterActivity.this);
+                                    managerCompat.notify(1,builder.build());
+                                    //send notification to user to remind them to verify their email
+                                });
+
+                                root.push().setValue(userMap);
+                                //upload data to database and simultaneously create user with email and password in auth
+                                loadingBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(RegisterActivity.this,"Registration Successful",Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+                                //if authorization with firebase is successful, register user and move to home class
+                                startActivity(i);
+                                finish();
+                            }
+                            else{
+                                loadingBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(RegisterActivity.this,"Registration Failed, " + Objects.requireNonNull(task.getException()).getMessage(),Toast.LENGTH_LONG).show();
+                                //if authorization with firebase is not successful, notify user of fail, along with the reason
+                            }
+                        });
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(RegisterActivity.this,"Registration Failed, ",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+    }
+
 }
