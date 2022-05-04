@@ -84,7 +84,7 @@ public class ChangePassActivity extends AppCompatActivity {
         }
         else if((TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) || TextUtils.isEmpty(oldPassword)) {
             Toast.makeText(ChangePassActivity.this,"Enter your information" ,Toast.LENGTH_SHORT).show();
-            //"Enter your information"
+            //if no information is entered, show toast
             loadingBar.setVisibility(View.INVISIBLE);
         }
         else if(password.length() < 6 || password.length() > 20){
@@ -108,6 +108,7 @@ public class ChangePassActivity extends AppCompatActivity {
                                             if (currentEmail != null) {
                                                 if (currentEmail.equals(currentUser.getEmail())) {
                                                     ds.child("password").getRef().setValue(password);
+                                                    //update password using email entered
                                                 }
                                                 else {
                                                     //current user does not match FBRTDB

@@ -1,6 +1,7 @@
 package com.example.cse3310project;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -11,10 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -36,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     public TextView registerTV, forgotpassTV;
     private ProgressBar loadingBar;
     private FirebaseAuth mAuth;
+    CheckBox rememberMe;
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference("Users");
 
     @Override
@@ -43,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_CSE3310Project);
         setContentView(R.layout.activity_login);
-
         TextInputEditText userEdit = findViewById(R.id.idEditUser);
         TextInputEditText passwordEdit = findViewById(R.id.idEditPassword);
         loginButton = findViewById(R.id.idLoginButton);
@@ -52,15 +55,33 @@ public class LoginActivity extends AppCompatActivity {
         loadingBar = findViewById(R.id.idProgressBarLoad);
         usernameLayout = findViewById(R.id.idTempUser);
         passwordLayout = findViewById(R.id.idTempPassword);
+        rememberMe = findViewById(R.id.RememberMe);
+
         loggedIn = false;
         mAuth = FirebaseAuth.getInstance();
 
         Bundle extra = getIntent().getExtras();
         if(extra != null) {
             userEdit.setText(extra.getString("username"));
+            //if user has logged in, set profile text to username in DB
         }
-
         forgotpassTV.setOnClickListener(view -> forgotPass());
+
+        rememberMe.setOnCheckedChangeListener((compoundButton, b) -> {
+            if(compoundButton.isChecked()){
+                SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("rememberme","true");
+                editor.apply();
+                //if checkbox is set to true, user will be automatically logged in, and it is true by default
+            }
+            else if(!compoundButton.isChecked()){
+                SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("rememberme","false");
+                editor.apply();
+            }
+        });
 
         registerTV.setOnClickListener(view -> {
             loadingBar.setVisibility(View.VISIBLE);
@@ -79,15 +100,24 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
-        if(user != null){
+        SharedPreferences prefs = getSharedPreferences("checkbox", MODE_PRIVATE);
+        String checkbox = prefs.getString("rememberme", "");
+        if(!checkbox.equals("true") && user != null){
+            //Toast.makeText(LoginActivity.this, "not checked", Toast.LENGTH_SHORT).show();
+        }
+        else if(checkbox.equals("true") && user != null){
+            //Toast.makeText(LoginActivity.this, "Remember Me checked", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(i);
             this.finish();
         }
+        else{
+            //Toast.makeText(LoginActivity.this, "Please sign in", Toast.LENGTH_SHORT).show();
+        }
     }
 
     protected void login(){
-        //display loading bar when logging while authorizing
+        //display loading bar when logging while authorizing with firebase and DB
         loadingBar.setVisibility(View.VISIBLE);
         String username = Objects.requireNonNull(usernameLayout.getEditText()).getText().toString().trim();
         String password = Objects.requireNonNull(passwordLayout.getEditText()).getText().toString().trim();
@@ -114,6 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                                         String currentDob = ds.child("dob").getValue(String.class);
                                         String currentImageurl = ds.child("imageurl").getValue(String.class);
                                         String verifiedstatus = ds.child("verifiedstatus").getValue(String.class);
+
                                         if (currentEmail != null) {
                                             mAuth.signInWithEmailAndPassword(currentEmail, password).addOnCompleteListener(task -> {
                                                 if(task.isSuccessful()){
@@ -174,38 +205,32 @@ public class LoginActivity extends AppCompatActivity {
     protected void forgotPass(){
         AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(LoginActivity.this);
         passwordResetDialog.setTitle("Reset Password?");
-        passwordResetDialog.setMessage("Enter your email and current password.");
+        passwordResetDialog.setMessage("Enter your email");
         EditText currentEmail = new EditText(LoginActivity.this);
-        EditText currentPassword = new EditText(LoginActivity.this);
         LinearLayout reset =new LinearLayout(getBaseContext());
         reset.setOrientation(LinearLayout.VERTICAL);
         reset.addView(currentEmail);
-        reset.addView(currentPassword);
-
-        currentEmail.setHint("Enter email");
-        currentPassword.setHint("Enter current password");
+        currentEmail.setHint("Your email");
+        currentEmail.setHintTextColor(ContextCompat.getColor(getBaseContext(), R.color.blue3));
         passwordResetDialog.setView(reset);
         passwordResetDialog.setIcon(R.drawable.shiba);
-
-        passwordResetDialog.setPositiveButton(Html.fromHtml("<font color='#53FF33'>Confirm</font>"), (dialogInterface, i) -> root.orderByChild("email").equalTo(currentEmail.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+        //create dialog to reset password if email and password match existing account in FB and DB
+        passwordResetDialog.setPositiveButton(Html.fromHtml("<font color='#4287f5'>Confirm</font>"), (dialogInterface, i) -> root.orderByChild("email").equalTo(currentEmail.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         String DBemail = ds.child("email").getValue(String.class);
-                        String DBpass = ds.child("password").getValue(String.class);
                         String verifiedstatus = ds.child("verifiedstatus").getValue(String.class);
-
-                        if (currentEmail.getText().toString().equals(DBemail) && verifiedstatus.equals("verified")) {
+                        if (currentEmail.getText().toString().equals(DBemail) && Objects.requireNonNull(verifiedstatus).equals("verified")) {
                             String email = currentEmail.getText().toString();
-
-                            mAuth.sendPasswordResetEmail(email).addOnSuccessListener(unused -> {
-
-                            }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Password reset failed.", Toast.LENGTH_LONG).show());
-                            mAuth.sendPasswordResetEmail(email).addOnSuccessListener(unused -> Toast.makeText(LoginActivity.this, "Reset link sent to your email", Toast.LENGTH_SHORT).show()).
-                                    addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Password reset link failed..." + e.getMessage(), Toast.LENGTH_SHORT).show());
+                            //send email as intent to forgot password class
+                            Intent intent = new Intent(LoginActivity.this, ForgotPassActivity.class);
+                            intent.putExtra("email", email);
+                            startActivity(intent);
+                            finish();
                         }
-                        else if (!verifiedstatus.equals("verified")){
+                        else if (!Objects.requireNonNull(verifiedstatus).equals("verified")){
                             //current user does not match FBRTDB
                             Toast.makeText(LoginActivity.this, "Not verified", Toast.LENGTH_LONG).show();
                         }
@@ -219,7 +244,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else{
                     //snapshot does not exist
-                    Toast.makeText(LoginActivity.this, "Login Failed, snapshot error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Username not found", Toast.LENGTH_LONG).show();
                 }
             }
             @Override
@@ -228,7 +253,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }));
 
-        passwordResetDialog.setNegativeButton(Html.fromHtml("<font color='#53FF33'>Exit</font>"), (dialogInterface, i) -> {
+        passwordResetDialog.setNeutralButton(Html.fromHtml("<font color='#4287f5'>Exit</font>"), (dialogInterface, i) -> {
             //close dialog and don't send link
             dialogInterface.dismiss();
         });

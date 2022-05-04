@@ -51,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
             startActivity(i);
             finish();
+            //log user out if not logged in
         }
 
         Bundle bundle = getIntent().getExtras();
@@ -66,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
             fragment.setProf_email(home_email);
             fragment.setProf_fullname(home_fullname);
             fragment.setProf_dob(home_dob);
+            //when logging in set profile data to info in DB
         }
         else if(bundle == null && currentUser != null){
             root.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -79,7 +81,7 @@ public class HomeActivity extends AppCompatActivity {
                             String DBEmail = ds.child("email").getValue(String.class);
                             String DBName = ds.child("fullname").getValue(String.class);
                             String DBDob = ds.child("dob").getValue(String.class);
-
+                            //if user has remember me on, find currentuser in database and set profile data to DB values
                             if(Objects.requireNonNull(DBEmail).equals(currentUser.getEmail())){
                                 ProfileFragment fragment = new ProfileFragment();
                                 fragment.setProf_username(DBUser);
@@ -104,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
             //Toast.makeText(this, "User successfully logged in", Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(this, "Error transferring DB data test", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error transferring DB data", Toast.LENGTH_SHORT).show();
         }
     }
 

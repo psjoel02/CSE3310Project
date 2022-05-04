@@ -66,6 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
             NotificationChannel channel = new NotificationChannel("My Notification", "My Notification", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
+            //set notification format for email verification
         }
 
         registerButton.setOnClickListener(v -> register());
@@ -99,8 +100,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(!password.equals(confirmPassword)){
             Toast.makeText(RegisterActivity.this,"Passwords must match" ,Toast.LENGTH_SHORT).show();
-            // System.out.println(password);
-            // System.out.println(confirmPassword);
             //if password does not match, show toast
             loadingBar.setVisibility(View.INVISIBLE);
         }

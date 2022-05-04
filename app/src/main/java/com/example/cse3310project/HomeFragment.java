@@ -32,7 +32,6 @@ public class HomeFragment extends Fragment {
 
     private String name;
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference("Users");
-    Button signOutButton;
     private ProgressBar loadingBar;
     public HomeFragment() {
     }
@@ -51,6 +50,7 @@ public class HomeFragment extends Fragment {
         Button uploadFromGalleryButton = view.findViewById(R.id.uploadFromGalleryButton);
         Button uploadFromCameraButton = view.findViewById(R.id.uploadFromCameraButton);
         Button signOutButton = view.findViewById(R.id.signOutButton);
+        Button securityQuestions = view.findViewById(R.id.securityQuestionsButton);
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         loadingBar = view.findViewById(R.id.idProgressBarHome);
@@ -66,18 +66,27 @@ public class HomeFragment extends Fragment {
             activity.finish();
         });
 
+        securityQuestions.setOnClickListener(v ->{
+            loadingBar.setVisibility(View.VISIBLE);
+            Intent i = new Intent(activity, SecurityQuestionsActivity.class);
+            startActivity(i);
+            loadingBar.setVisibility(View.INVISIBLE);
+            activity.finish();
+        });
+
         if(currentUser == null) {
             Intent i = new Intent(activity, LoginActivity.class);
             Toast.makeText(activity, "Not logged in", Toast.LENGTH_SHORT).show();
             startActivity(i);
             activity.finish();
+            //log user out if not signed in
         }
 
         if(!Objects.requireNonNull(currentUser).isEmailVerified()){
             verifiedTV.setVisibility(View.VISIBLE);
         }
         else{
-            //if user is verified, update value in database
+            //if user is verified, update value in database and display verification status
             root.orderByChild("email").equalTo(currentUser.getEmail()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,7 +118,7 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        //stores name on device for homepage, profile reads from DB
+        //SharedPreferences stores name on device for homepage, profile reads from DB
         SharedPreferences mPrefs = requireContext().getSharedPreferences("NamePref", 0);
         name = mPrefs.getString("HomeName", "UserNotFound");
         helloTextView.setText(String.format("Hello, %s!", name));

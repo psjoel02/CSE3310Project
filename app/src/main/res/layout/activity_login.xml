@@ -25,7 +25,7 @@
             android:id="@+id/idEditUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_baseline_person_pin_24"
+            android:drawableStart="@drawable/ic_baseline_android_24"
             android:fontFamily="@font/poppins_bold"
             android:importantForAutofill="no"
             android:inputType="textNoSuggestions"
@@ -72,7 +72,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="0dp"
         android:src="@drawable/shiba_reg" />
-
     <TextView
         android:id="@+id/LoginText"
         android:layout_width="match_parent"
@@ -122,17 +121,28 @@
 
     <TextView
         android:id="@+id/idTVforgotPassword"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/idTempPassword"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/poppins_bold"
-        android:gravity="right"
         android:text="Forgot Password?"
         android:textColor="@color/green"
         android:textSize="18sp" />
 
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/RememberMe"
+        android:layout_width="162dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idTempPassword"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="16dp"
+        android:layout_toRightOf="@id/idTVforgotPassword"
+        android:checked="true"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Remember Me"
+        android:textColor="@color/white"></androidx.appcompat.widget.AppCompatCheckBox>
 
     <TextView
         android:id="@+id/idTVRegister"

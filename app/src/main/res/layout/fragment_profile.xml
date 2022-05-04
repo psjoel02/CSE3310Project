@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="130dp"
         android:padding="20dp"
         android:background="@drawable/gradient2">
 
@@ -21,22 +21,11 @@
 
         <ImageView
             android:id="@+id/profile_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/shiba_reg" />
-
-        <ImageView
-            android:id="@+id/profile_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignEnd="@id/profile_image"
-            android:layout_marginTop="80dp"
-            android:layout_marginRight="-25dp"
-            android:src="@drawable/ic_baseline_image_search_24">
-
-        </ImageView>
 
         <TextView
             android:id="@+id/userProfileHeaderText"
@@ -45,10 +34,11 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="30dp"
             android:layout_toStartOf="@id/profile_image"
+            android:gravity="left"
             android:includeFontPadding="false"
             android:text="default_username"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
 
     </RelativeLayout>
 
@@ -85,7 +75,7 @@
                 android:id="@+id/userDateOfBirthText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_person_outline_24"
+                android:drawableStart="@drawable/ic_baseline_edit_calendar_24"
                 android:drawablePadding="10dp"
                 android:clickable="false"
                 android:cursorVisible="false"
@@ -107,7 +97,7 @@
                 android:id="@+id/userNameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_person_pin_24"
+                android:drawableStart="@drawable/ic_baseline_android_24"
                 android:drawablePadding="10dp"
                 android:text="default_username"
                 android:textAppearance="?android:attr/textAppearanceSmallInverse">
@@ -128,6 +118,7 @@
                 android:drawableStart="@drawable/ic_baseline_email_24"
                 android:drawablePadding="10dp"
                 android:text="default_email"
+                android:textColor="#FF4500"
                 app:passwordToggleEnabled="true"
                 android:inputType="textPassword"
                 android:textAppearance="?android:attr/textAppearanceSmallInverse">
@@ -145,9 +136,10 @@
                 android:id="@+id/passText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_email_24"
+                android:drawableStart="@drawable/ic_baseline_lock_person_24"
                 android:drawablePadding="10dp"
                 android:text="default_password"
+                android:textColor="#FF4500"
                 android:inputType="textPassword"
                 android:textAppearance="?android:attr/textAppearanceSmallInverse">
 

@@ -79,11 +79,12 @@ public class ChangeEmailActivity extends AppCompatActivity {
         }
         else if((TextUtils.isEmpty(Email) || TextUtils.isEmpty(confirmEmail)) || TextUtils.isEmpty(Password)) {
             Toast.makeText(ChangeEmailActivity.this,"Enter your information" ,Toast.LENGTH_SHORT).show();
-            //"Enter your information"
+            //if no information is entered, show toast
             loadingBar.setVisibility(View.INVISIBLE);
         }
         else if(!Email.contains("@") || !Email.contains(".")){
             Toast.makeText(ChangeEmailActivity.this, "Email is not formatted correctly", Toast.LENGTH_SHORT).show();
+            //if email does not contain @ or . chars, show toast
             loadingBar.setVisibility(View.INVISIBLE);
         }
         else if(Email.length() < 10 || Email.length() > 35){
@@ -107,6 +108,7 @@ public class ChangeEmailActivity extends AppCompatActivity {
                                             if (currentPassword != null) {
                                                 if (currentPassword.equals(Password)) {
                                                     ds.child("email").getRef().setValue(Email);
+                                                    //using password to access DB, change email only if new email is verified
                                                 }
                                                 else {
                                                     //current user does not match FBRTDB

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/darkhomeback2">
+
+    <ProgressBar
+        android:id="@+id/idProgressBarLoad"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/ic_baseline_home_24_light">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/ChangeSQText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:text="Change Security Questions"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="25sp" />
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/SecurityQ1"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown">
+
+    </androidx.appcompat.widget.AppCompatSpinner>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="First Answer"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/SecurityQ1"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sq1Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse"
+            android:drawableStart="@drawable/ic_baseline_question_mark_24"
+            android:drawablePadding="10dp">
+
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/SecurityQ2"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/SecurityQ1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown">
+
+    </androidx.appcompat.widget.AppCompatSpinner>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:hint="Second Answer"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/SecurityQ2"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/sq2Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmallInverse"
+            android:drawableStart="@drawable/ic_baseline_question_mark_24"
+            android:drawablePadding="10dp">
+
+        </com.google.android.material.textfield.TextInputEditText>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/idChangeSQButton"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/SecurityQ2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="120dp"
+        android:background="@color/purple_500"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Change Security Questions"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/idHomeButton"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idChangeSQButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/purple_700"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Back to Home"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+
+</RelativeLayout>

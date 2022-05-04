@@ -8,9 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#304365</color>
-
     <color name="blue1">#0E2433</color>
     <color name="blue2">#1C4966</color>
+    <color name="blue3">#4287f5</color>
     <color name="green">#3DFF33</color>
     <color name="orange">#FFB133</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#3DFF33</color>
