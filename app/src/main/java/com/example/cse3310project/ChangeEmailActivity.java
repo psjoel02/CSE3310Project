@@ -93,7 +93,8 @@ public class ChangeEmailActivity extends AppCompatActivity {
             //password must be greater than 6 characters, no alphanumeric required
         }
         else{
-           AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(currentUser.getEmail()), Password);
+            AppCompatActivity activity = this;
+            AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(currentUser.getEmail()), Password);
             currentUser.reauthenticate(credential).addOnCompleteListener(task -> {
                 //reauthentication successful
                 if(task.isSuccessful()){
@@ -109,6 +110,9 @@ public class ChangeEmailActivity extends AppCompatActivity {
                                                 if (currentPassword.equals(Password)) {
                                                     ds.child("email").getRef().setValue(Email);
                                                     //using password to access DB, change email only if new email is verified
+
+                                                    // Change email associated with account
+                                                    currentUser.updateEmail(Email);
                                                 }
                                                 else {
                                                     //current user does not match FBRTDB
@@ -142,6 +146,8 @@ public class ChangeEmailActivity extends AppCompatActivity {
                     Toast.makeText(ChangeEmailActivity.this, "Not updated, task failed"+ Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
+            // Sign the current user out, then return to login page
+            FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(ChangeEmailActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();

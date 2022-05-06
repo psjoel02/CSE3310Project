@@ -137,7 +137,7 @@
         android:textSize="18sp" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/idHomeButton"
+        android:id="@+id/idLoginButton"
         android:layout_width="372dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/idResetPassButton"

@@ -25,7 +25,7 @@ public class ForgotPassActivity extends AppCompatActivity {
     private TextInputLayout answer1Layout, answer2Layout;
     private FirebaseAuth mAuth;
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference("Users");
-    Button homeButton, resetPassButton;
+    Button loginButton, resetPassButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,28 +47,30 @@ public class ForgotPassActivity extends AppCompatActivity {
         TextInputEditText answer2Text = findViewById(R.id.idAnswer2);
         answer1Layout = findViewById(R.id.idTempAnswer1);
         answer2Layout = findViewById(R.id.idTempAnswer2);
-        homeButton = findViewById(R.id.idHomeButton);
+        loginButton = findViewById(R.id.idLoginButton);
         resetPassButton = findViewById(R.id.idResetPassButton);
         Intent i = getIntent();
         String email = i.getExtras().getString("email");
-
-        homeButton.setOnClickListener(view -> {
+        if((question1 == null || question2 == null) || (answer1 == null || answer2 == null)) {
+            Toast.makeText(ForgotPassActivity.this, "Your security questions and answers were not set.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ForgotPassActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        loginButton.setOnClickListener(view -> {
             Intent intent = new Intent(ForgotPassActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         });
 
         resetPassButton.setOnClickListener(view -> {
-            if(Objects.requireNonNull(answer1Text.getText()).toString().equals("") || Objects.requireNonNull(answer2Text.getText()).toString().equals("")){
+            if (Objects.requireNonNull(answer1Text.getText()).toString().equals("") || Objects.requireNonNull(answer2Text.getText()).toString().equals("")) {
                 Toast.makeText(ForgotPassActivity.this, "Please enter your answers", Toast.LENGTH_SHORT).show();
-            }
-            else if(!answer1Text.getText().toString().equals(answer1)){
+            } else if (!answer1Text.getText().toString().equals(answer1)) {
                 Toast.makeText(ForgotPassActivity.this, "Your first answer is incorrect", Toast.LENGTH_SHORT).show();
-            }
-            else if(!answer2Text.getText().toString().equals(answer2)){
+            } else if (!answer2Text.getText().toString().equals(answer2)) {
                 Toast.makeText(ForgotPassActivity.this, "Your second answer is incorrect", Toast.LENGTH_SHORT).show();
-            }
-            else if(answer1Text.getText().toString().equals(answer1) && answer2Text.getText().toString().equals(answer2)){
+            } else if (answer1Text.getText().toString().equals(answer1) && answer2Text.getText().toString().equals(answer2)) {
                 mAuth.sendPasswordResetEmail(email).addOnSuccessListener(unused -> {
                 }).addOnFailureListener(e -> Toast.makeText(ForgotPassActivity.this, "Password reset failed.", Toast.LENGTH_LONG).show());
                 mAuth.sendPasswordResetEmail(email).addOnSuccessListener(unused -> Toast.makeText(ForgotPassActivity.this, "Reset link sent to your email", Toast.LENGTH_SHORT).show()).
@@ -76,8 +78,7 @@ public class ForgotPassActivity extends AppCompatActivity {
                 Intent intent = new Intent(ForgotPassActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
-            }
-            else{
+            } else {
                 Toast.makeText(ForgotPassActivity.this, "Please enter your answers", Toast.LENGTH_SHORT).show();
             }
         });

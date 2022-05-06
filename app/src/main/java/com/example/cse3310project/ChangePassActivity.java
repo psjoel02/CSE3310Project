@@ -109,6 +109,7 @@ public class ChangePassActivity extends AppCompatActivity {
                                                 if (currentEmail.equals(currentUser.getEmail())) {
                                                     ds.child("password").getRef().setValue(password);
                                                     //update password using email entered
+                                                    currentUser.updatePassword(password);
                                                 }
                                                 else {
                                                     //current user does not match FBRTDB
@@ -142,6 +143,7 @@ public class ChangePassActivity extends AppCompatActivity {
                     Toast.makeText(ChangePassActivity.this, "Not updated, task failed"+ Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
+            FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(ChangePassActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
