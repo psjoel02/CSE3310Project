@@ -3,70 +3,63 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/blue1">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/typeInfo"
         android:layout_width="334dp"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:text="Animal Type"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/breedInfo"
         android:layout_width="334dp"
         android:layout_height="48dp"
         android:layout_marginTop="52dp"
         android:text="Animal Breed"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/typeInfo" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="335dp"
-        android:layout_height="88dp"
+        android:id="@+id/descInfo"
+        android:layout_width="336dp"
+        android:layout_height="114dp"
         android:layout_marginTop="9dp"
         android:text="Description"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/breedInfo" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="403dp"
-        android:layout_height="193dp"
-        android:layout_marginTop="6dp"
+        android:id="@+id/animalView"
+        android:layout_width="304dp"
+        android:layout_height="285dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/descInfo"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
-        android:id="@+id/btn_goAnimalData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="40dp"
-        android:text="Data"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="40dp"
+        android:id="@+id/btn_goHome"
+        android:layout_width="287dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="60dp"
         android:text="Home"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/btn_goAnimalData"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/animalView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

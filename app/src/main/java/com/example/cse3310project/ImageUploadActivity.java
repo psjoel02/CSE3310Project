@@ -25,10 +25,14 @@ import java.nio.ByteOrder;
 
 public class ImageUploadActivity extends AppCompatActivity
 {
+    public static final String PACKAGE_EXTRA = "com.example.cse3310project.PACKAGE_EXTRA";
+    public static final String PACKAGE_EXTRA2 = "com.example.cse3310project.PACKAGE_EXTRA2";
     public static final int GALLERY_CODE = 100;
     public static final int CAMERA_CODE = 101;
 
-    Button galleryButton, cameraButton, home; //take picture button
+    Button galleryButton, cameraButton, descriptionButton, home; //take picture button
+    public static final int IMAGE_SIZE = 224;
+
     ImageView picView; //image of picture taken
     TextView animal, breed; //for text of animal and breed
     private ActivityResultLauncher<Intent> cameraLauncher, galleryLauncher;
@@ -42,6 +46,7 @@ public class ImageUploadActivity extends AppCompatActivity
         picView = findViewById(R.id.myImage);
         galleryButton = findViewById(R.id.uploadButton);
         cameraButton = findViewById(R.id.pictureButton);
+        descriptionButton = findViewById(R.id.descriptionButton);
         breed = findViewById(R.id.breed);
         animal = findViewById(R.id.animal);
         home = findViewById(R.id.homeButtonCamera);
@@ -58,6 +63,7 @@ public class ImageUploadActivity extends AppCompatActivity
                 try {
                     Uri data = result.getData().getData();
                     Bitmap pic = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data); //changes URI to bitmap
+                    pic = processImage(pic);
 
                     picView.setImageBitmap(pic); //shows the image uploaded
                     if (!uploadedFirstImage) {
@@ -81,6 +87,7 @@ public class ImageUploadActivity extends AppCompatActivity
             {
                 Bundle data = result.getData().getExtras();
                 Bitmap pic =  (Bitmap) data.get("data");
+                pic = processImage(pic);
                 picView.setImageBitmap(pic); //shows the image taken
                 if(!takenFirstImage)
                 {
@@ -150,11 +157,26 @@ public class ImageUploadActivity extends AppCompatActivity
         }
     }
 
+    public Bitmap processImage(Bitmap source) {
+        int x = 0, y = 0;
+        int width = source.getWidth(), height = source.getHeight();
+        if(width > height) {
+            x = (int) ((((float)width) / 2) - (((float)height)/2));
+            width = height;
+        } else {
+            y = (int) ((((float)height) / 2) - (((float)width)/2));
+            height = width;
+        }
+        Bitmap pic = Bitmap.createBitmap(source, x, y, width, height);
+        pic = Bitmap.createScaledBitmap(pic, IMAGE_SIZE, IMAGE_SIZE, false);
+        return pic;
+    }
+
     public void classify(Bitmap image)
     {
         try {
             //size from model
-            int size = 224;
+            int size = IMAGE_SIZE;
             image = Bitmap.createScaledBitmap(image, size, size, false);
             ModelUnquant model = ModelUnquant.newInstance(getApplicationContext());
 
@@ -192,9 +214,21 @@ public class ImageUploadActivity extends AppCompatActivity
                     maxBreed = i; //index of maximum breed percent
                 }
             }
-            String[] animals = {"Dog"}; //will assign more animals as the model is trained
-            String[] breeds = {"Labrador", "Pitbull", "German Shepard", "Chihuahua", "Golden Retriever"}; //same as animals
-            animal.setText(animals[0]);
+            String[] animals = {"Dog", "Cat", "Parrot"};
+            String[] breeds = {"Labrador", "Pitbull", "German Shepard", "Chihuahua", "Golden Retriever", "Bombay", "Sphinx", "Abyssinian", "Macaw", "Cockatoo", "Parakeet"};
+            if(maxBreed < 5)
+            {
+                animal.setText(animals[0]);
+            }
+            else if(maxBreed >= 5 && maxBreed < 8)
+            {
+                animal.setText(animals[1]);
+            }
+            else
+            {
+                animal.setText(animals[2]);
+            }
+
             breed.setText(breeds[maxBreed]);
 
             for(int i = 0; i < breeds.length; i++) //prints confidences into logcat
@@ -204,6 +238,17 @@ public class ImageUploadActivity extends AppCompatActivity
 
             // Releases model resources if no longer used.
             model.close();
+            String breedIn = breed.getText().toString();
+            String typeIn = animal.getText().toString();
+
+            descriptionButton.setOnClickListener(view -> {
+                Intent intent = new Intent(this, AnimalInfo.class);
+                intent.putExtra(PACKAGE_EXTRA, breedIn);
+                intent.putExtra(PACKAGE_EXTRA2, typeIn);
+                startActivity(intent);
+            });
+
+
         } catch (IOException e) {
             System.out.println("Something went wrong with model");
             e.printStackTrace();

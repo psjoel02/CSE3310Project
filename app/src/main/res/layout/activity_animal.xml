@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/blue1"
+    android:focusableInTouchMode="false"
+    android:isScrollContainer="false">
 
     <Button
         android:id="@+id/btn_addAnimal"
@@ -23,6 +26,8 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Animal Type"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -37,6 +42,8 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="Animal Breed"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,6 +58,8 @@
         android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="Description"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -64,6 +73,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:text="View"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/aDescription" />
 
@@ -73,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="View All"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toStartOf="@+id/btn_viewAnimal"
         app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toEndOf="@+id/btn_addAnimal"
@@ -83,10 +94,13 @@
         android:layout_width="334dp"
         android:layout_height="343dp"
         android:layout_marginTop="40dp"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_viewAllAnimals"
+        android:focusableInTouchMode="true"
+        android:isScrollContainer="false"
         app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

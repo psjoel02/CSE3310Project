@@ -21,20 +21,27 @@ public class AnimalActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_animal);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_animal);
 
 
-    btn_addAnimal = findViewById(R.id.btn_addAnimal);
-    btn_viewAllAnimals = findViewById(R.id.btn_viewAllAnimals);
-    btn_viewAnimal = findViewById(R.id.btn_viewAnimal);
-    aType = findViewById(R.id.aType);
-    aBreed = findViewById(R.id.aBreed);
-    aDescription = findViewById(R.id.aDescription);
-    lv_animalList = findViewById(R.id.lv_animalList);
+        btn_addAnimal = findViewById(R.id.btn_addAnimal);
+        btn_viewAllAnimals = findViewById(R.id.btn_viewAllAnimals);
+        btn_viewAnimal = findViewById(R.id.btn_viewAnimal);
+        aType = findViewById(R.id.aType);
+        aBreed = findViewById(R.id.aBreed);
+        aDescription = findViewById(R.id.aDescription);
+        lv_animalList = findViewById(R.id.lv_animalList);
 
-    animalDataHelper = new AnimalDataHelper(AnimalActivity.this);
+        btn_viewAnimal.setOnClickListener(v -> {
+            //Toast.makeText(AnimalActivity.this, dAnimal.toString(), Toast.LENGTH_SHORT).show();
+            openAnimalData();
+        });
+
+    /*
+
+    animalDataHelper = new AnimalDataHelper(AnimalActivity.this, "animal.db", 1);
 
         ShowAllAnimalView(animalDataHelper);
 
@@ -50,7 +57,7 @@ public class AnimalActivity extends AppCompatActivity {
                 animalModel = new AnimalModel(-1, "error", "error", "error");
             }
 
-            AnimalDataHelper animalDataHelper = new AnimalDataHelper(AnimalActivity.this);
+            AnimalDataHelper animalDataHelper = new AnimalDataHelper(AnimalActivity.this, "animal.db", 1);
 
             boolean success = animalDataHelper.addOne(animalModel);
             Toast.makeText(AnimalActivity.this, "Success " + success, Toast.LENGTH_SHORT).show();
@@ -68,7 +75,7 @@ public class AnimalActivity extends AppCompatActivity {
 
     btn_viewAllAnimals.setOnClickListener(v -> {
 
-        animalDataHelper = new AnimalDataHelper(AnimalActivity.this);
+        animalDataHelper = new AnimalDataHelper(AnimalActivity.this, "animal.db", 1);
 
         ShowAllAnimalView(animalDataHelper);
 
@@ -88,6 +95,10 @@ public class AnimalActivity extends AppCompatActivity {
     private void ShowAllAnimalView(AnimalDataHelper animalDataHelper2) {
         animalArrayAdapter = new ArrayAdapter<>(AnimalActivity.this, android.R.layout.simple_list_item_1, animalDataHelper2.getAllAnimals());
         lv_animalList.setAdapter(animalArrayAdapter);
+    }
+
+
+     */
     }
 
     private void openAnimalData(){

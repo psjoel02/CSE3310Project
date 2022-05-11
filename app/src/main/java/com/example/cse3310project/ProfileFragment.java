@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -102,7 +103,7 @@ public class ProfileFragment extends Fragment {
             return;
         }
         else if(currentUser != null && currentUser.getPhotoUrl() != null){
-                profilePic.setRotation(90);
+                //profilePic.setRotation(0);
                 //on my phone it shows up as rotated -90 degrees when taking photographs,
                 //using the emulator it shows up as rotated 90 degrees, can be modified before presentation
                 Glide.with(getActivity()).load(currentUser.getPhotoUrl()).into(profilePic);
@@ -149,8 +150,16 @@ public class ProfileFragment extends Fragment {
                       if (result.getResultCode() == Activity.RESULT_OK && choice == 0) {
                           Intent data = result.getData();
                           Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                          profilePic.setImageBitmap(bmp);
-                          uploadImage(bmp);
+                          Matrix rotationMatrix = new Matrix();
+                          if(bmp.getWidth() >= bmp.getHeight()){
+                              rotationMatrix.setRotate(90);
+                          }else{
+                              rotationMatrix.setRotate(0);
+                          }
+
+                          Bitmap rotatedBitmap = Bitmap.createBitmap(bmp,0,0,bmp.getWidth(),bmp.getHeight(),rotationMatrix,true);
+                          profilePic.setImageBitmap(rotatedBitmap);
+                          uploadImage(rotatedBitmap);
                           //if camera was selected, convert data from onclick into bitmap and upload it to FB storage
                       }
                       else{
